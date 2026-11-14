@@ -131,6 +131,7 @@ export type Community = {
   description: string;
   image: string;
   ctaLabel?: string;
+  tag?: string;
 };
 
 export const communities: Community[] = [
@@ -140,6 +141,23 @@ export const communities: Community[] = [
     description:
       "The city's central district — boulevard apartments and penthouses beside the fountain, opera house and Burj Khalifa.",
     image: "/downtown dubai.avif",
+    tag: "Prime City",
+  },
+  {
+    slug: "dubai-marina",
+    name: "Dubai Marina",
+    description:
+      "A vibrant waterfront district with luxury high-rise residences, marina promenade dining, and yacht berths.",
+    image: "/assets/communities/marina.jpg",
+    tag: "Waterfront",
+  },
+  {
+    slug: "palm-jumeirah",
+    name: "Palm Jumeirah",
+    description:
+      "The world-renowned tree-shaped island featuring exclusive beachfront villas, five-star resorts, and luxury apartments.",
+    image: "/assets/communities/palm.jpg",
+    tag: "Island Living",
   },
   {
     slug: "the-valley",
@@ -147,6 +165,7 @@ export const communities: Community[] = [
     description:
       "A quieter townhouse and villa community along the Dubai–Al Ain Road, with sports fields, pocket parks and a town centre.",
     image: "/the-valley.jpg",
+    tag: "Off-Plan",
   },
   {
     slug: "dubai-hills-estate",
@@ -154,6 +173,7 @@ export const communities: Community[] = [
     description:
       "Villas and apartments set within an 18-hole championship golf course, mature parkland and tree-lined boulevards.",
     image: "/dubai hills state.avif",
+    tag: "Golf Community",
   },
   {
     slug: "the-oasis-by-emaar",
@@ -161,6 +181,7 @@ export const communities: Community[] = [
     description:
       "Mansions and large-plot villas arranged around lagoons, water canals and swimmable lakes on the western edge of the city.",
     image: "/oasis by emaar.avif",
+    tag: "Waterfront",
   },
   {
     slug: "dubai-creek-harbour",
@@ -168,6 +189,7 @@ export const communities: Community[] = [
     description:
       "A waterfront district on the historic creek, built around a marina promenade, parks and long views back to the skyline.",
     image: "/dubai creek.avif",
+    tag: "Waterfront",
   },
   {
     slug: "rashid-yachts-and-marina",
@@ -175,6 +197,7 @@ export const communities: Community[] = [
     description:
       "A marina address for apartments and penthouses, with berths, a yacht club and a walkable waterfront.",
     image: "/rashid yacht.avif",
+    tag: "Marina Living",
   },
   {
     slug: "arabian-ranches-iii",
@@ -182,6 +205,7 @@ export const communities: Community[] = [
     description:
       "Family townhouses and villas built around a central park, lazy river and clubhouse, in a mature ranches setting.",
     image: "/arabian ranches.avif",
+    tag: "Gated Community",
   },
   {
     slug: "emaar-south",
@@ -189,6 +213,7 @@ export const communities: Community[] = [
     description:
       "Golf-side homes and apartments close to Al Maktoum International, laid out around parks and community retail.",
     image: "/emaar south.avif",
+    tag: "Golf Community",
   },
   {
     slug: "grand-polo-club-and-resort",
@@ -196,6 +221,7 @@ export const communities: Community[] = [
     description:
       "An equestrian-led community of low villas, stables and bridle paths, planned around open green space.",
     image: "/grand-polo.jpeg",
+    tag: "Off-Plan",
   },
   {
     slug: "emaar-beachfront",
@@ -203,6 +229,7 @@ export const communities: Community[] = [
     description:
       "A private island address at Dubai Harbour, with 1.5 km of shoreline, sea-view apartments and easy access to Dubai Marina.",
     image: "/beachfront.avif",
+    tag: "Waterfront",
   },
 ];
 

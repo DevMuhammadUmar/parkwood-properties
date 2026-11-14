@@ -13,9 +13,10 @@ import {
 } from "lucide-react";
 import type { ComponentType } from "react";
 
-import { SectionBlock } from "@/components/site/sections";
 import type { CommunityStat } from "@/content/communities";
 import { getCommunityDetail } from "@/content/communities";
+import { commonAr, communityDetailsAr, pagesAr } from "@/content/i18n";
+import { useNav } from "@/context/NavContext";
 import { absoluteUrl, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 
 const icons: Record<string, ComponentType<{ className?: string }>> = {
@@ -119,16 +120,34 @@ export const Route = createFileRoute("/communities_/$slug")({
 });
 
 function CommunityNotFound() {
+  const { lang } = useNav();
+  const isAr = lang === "ar";
+  const p = pagesAr.communityDetail;
+
   return (
-    <main className="px-5 py-20 sm:px-6 sm:py-24 md:px-10">
-      <div className="mx-auto max-w-2xl space-y-6">
-        <h1 className="display text-3xl">Community not found</h1>
-        <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-          We could not find that community. Browse the full list instead.
+    <main className="bg-[#FBFAF7] px-6 pt-[130px] pb-24 text-[#452C1D]">
+      <div className="mx-auto max-w-[780px] space-y-6 text-center">
+        <h1 className="font-serif text-[24px] uppercase tracking-[0.08em] text-[#452C1D] sm:text-[29px]">
+          {isAr ? p.notFoundTitle : "Community not found"}
+        </h1>
+        <p className="font-sans text-[13px] leading-relaxed text-[#452C1D]/80">
+          {isAr
+            ? p.notFoundBody
+            : "We could not find that community. Browse our complete directory of Dubai masterplanned districts instead."}
         </p>
-        <Link to="/communities" className="btn-outline">
-          All communities
-        </Link>
+        <div className="pt-2">
+          <Link
+            to="/communities"
+            style={{
+              borderColor: "var(--color-brown, #452C1D)",
+              color: "var(--color-brown, #452C1D)",
+              textDecoration: "none",
+            }}
+            className="inline-flex items-center justify-center border border-[#452C1D] px-8 py-3.5 font-sans text-xs font-medium uppercase tracking-[0.16em] text-[#452C1D] transition-colors duration-200 hover:bg-[#452C1D] hover:text-[#FBFAF7]"
+          >
+            {isAr ? commonAr.allCommunities : "All communities"}
+          </Link>
+        </div>
       </div>
     </main>
   );
@@ -136,122 +155,237 @@ function CommunityNotFound() {
 
 function CommunityDetailPage() {
   const { community } = Route.useLoaderData();
+  const { lang } = useNav();
+  const isAr = lang === "ar";
+  const ar = isAr ? communityDetailsAr[community.slug] : undefined;
+  const p = pagesAr.communityDetail;
+
+  const displayName = ar?.name ?? community.name;
+  const overview = ar?.overview ?? community.overview;
+  const amenities = ar?.amenities ?? community.amenities;
 
   return (
-    <main>
-      <section className="border-b border-border px-5 pt-8 pb-10 sm:px-6 sm:pt-10 sm:pb-12 md:px-10 md:pt-14">
-        <div className="mx-auto max-w-[1400px]">
-          <Link
-            to="/communities"
-            className="label inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowLeft className="size-4" aria-hidden="true" />
-            Back to communities
-          </Link>
+    <main className="bg-[#FBFAF7] pt-[72px] text-[#452C1D]">
+      {/* ── Full-Bleed Community Hero ── */}
+      {community.heroImage ? (
+        <section
+          aria-label={displayName}
+          className="relative flex min-h-[420px] w-full items-end overflow-hidden bg-[#1a120c] md:min-h-[500px]"
+        >
+          <img
+            src={community.heroImage}
+            alt={`${displayName} masterplanned community in Dubai`}
+            width={1600}
+            height={900}
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(20, 12, 8, 0.82) 0%, rgba(20, 12, 8, 0.45) 55%, rgba(20, 12, 8, 0.25) 100%)",
+            }}
+          />
+          <div className="relative z-10 mx-auto w-full max-w-[1200px] px-6 py-12 sm:py-16 md:py-20">
+            <Link
+              to="/communities"
+              className="inline-flex items-center gap-2 font-sans text-[11px] font-medium uppercase tracking-[0.18em] text-[#FBFAF7]/85 transition-opacity hover:opacity-70"
+            >
+              <ArrowLeft className="size-3.5 rtl:rotate-180" aria-hidden="true" />
+              {isAr ? commonAr.backToCommunities : "Back to communities"}
+            </Link>
 
-          <h1 className="display mt-6 font-medium text-2xl sm:mt-8 sm:text-3xl md:text-[2.6rem]">
-            {community.name}
-          </h1>
-
-          <div className="mt-10 max-w-full space-y-5">
-            {community.overview.paragraphs.map((p: string) => (
-              <p key={p} className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                {p}
+            <h1
+              className="mt-5 font-serif font-light uppercase leading-[1.06] tracking-[0.06em] text-[#FBFAF7]"
+              style={{
+                fontSize: "clamp(1.75rem, 3.2vw, 2.65rem)",
+                textShadow: "0 2px 20px rgba(0, 0, 0, 0.4)",
+              }}
+            >
+              {displayName}
+            </h1>
+            {community.heroCaption ? (
+              <p className="mt-3 max-w-[640px] font-sans text-sm text-[#FBFAF7]/85">
+                {community.heroCaption}
               </p>
-            ))}
+            ) : null}
+          </div>
+        </section>
+      ) : (
+        <section className="bg-paper-texture border-b border-[#452C1D]/12 px-6 py-14 sm:py-18">
+          <div className="mx-auto max-w-[1200px]">
+            <Link
+              to="/communities"
+              className="inline-flex items-center gap-2 font-sans text-[11px] font-medium uppercase tracking-[0.18em] text-[#452C1D]/75 transition-opacity hover:opacity-65"
+            >
+              <ArrowLeft className="size-3.5 rtl:rotate-180" aria-hidden="true" />
+              {isAr ? commonAr.backToCommunities : "Back to communities"}
+            </Link>
+            <h1
+              className="mt-5 font-serif uppercase leading-[1.08] tracking-[0.06em] text-[#452C1D]"
+              style={{ fontSize: "clamp(1.75rem, 3.2vw, 2.5rem)" }}
+            >
+              {displayName}
+            </h1>
+          </div>
+        </section>
+      )}
+
+      {/* ── Overview Section ── */}
+      <section className="bg-[#FBFAF7] py-16 sm:py-24">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <div className="grid gap-10 lg:grid-cols-[0.42fr_0.58fr] lg:gap-16">
+            <div>
+              <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-[#452C1D]/60">
+                {isAr ? p.overviewKicker : "COMMUNITY OVERVIEW"}
+              </p>
+              <h2
+                className="mt-3 font-serif uppercase leading-tight tracking-[0.08em] text-[#452C1D]"
+                style={{ fontSize: "clamp(1.35rem, 2.2vw, 1.8rem)" }}
+              >
+                {overview.heading}
+              </h2>
+            </div>
+
+            <div className="space-y-5">
+              {overview.paragraphs.map((para: string, idx: number) => (
+                <p
+                  key={para}
+                  className={
+                    idx === 0
+                      ? "font-serif text-xl leading-[1.5] text-[#452C1D] sm:text-2xl"
+                      : "font-sans text-[13px] leading-[1.75] text-[#452C1D]/85"
+                  }
+                >
+                  {para}
+                </p>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {community.heroImage ? (
-        <figure className="m-0">
-          <div className="aspect-[4/3] w-full overflow-hidden bg-muted sm:aspect-[16/9] lg:aspect-[16/7]">
-            <img
-              src={community.heroImage}
-              alt={`${community.name} masterplanned community in Dubai`}
-              width={1600}
-              height={700}
-              className="h-full w-full object-cover"
-            />
-          </div>
-          {community.heroCaption ? (
-            <figcaption className="mx-auto max-w-[1400px] px-5 pt-3 text-sm text-muted-foreground sm:px-6 md:px-10">
-              {community.heroCaption}
-            </figcaption>
-          ) : null}
-        </figure>
-      ) : null}
-
-      {community.overview.restParagraphs?.length || community.overview.restHeading ? (
-        <section className="px-5 py-12 sm:px-6 sm:py-14 md:px-10 md:py-20">
-          <div className="mx-auto max-w-[1400px]">
-            <div className="max-w-full space-y-5">
-              {community.overview.restHeading && (
-                <h2 className="display uppercase mt-2 mb-8 text-2xl sm:text-3xl md:text-4xl">
-                  {community.overview.restHeading}
-                </h2>
-              )}
-              {community.overview.restParagraphs?.map((p: string) => (
-                <p key={p} className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  {p}
-                </p>
-              ))}
+      {/* ── Extended Narrative / Lifestyle ── */}
+      {overview.restParagraphs?.length || overview.restHeading ? (
+        <section className="border-t border-[#452C1D]/10 bg-[#FBFAF7] py-16 sm:py-20">
+          <div className="mx-auto max-w-[1200px] px-6">
+            <div className="grid gap-10 lg:grid-cols-[0.42fr_0.58fr] lg:gap-16">
+              <div>
+                {overview.restHeading ? (
+                  <h2
+                    className="font-serif uppercase leading-tight tracking-[0.08em] text-[#452C1D]"
+                    style={{ fontSize: "clamp(1.25rem, 2vw, 1.65rem)" }}
+                  >
+                    {overview.restHeading}
+                  </h2>
+                ) : (
+                  <span className="font-sans text-[11px] uppercase tracking-[0.2em] text-[#452C1D]/60">
+                    {isAr ? p.livingHeading : "LIVING & SETTING"}
+                  </span>
+                )}
+              </div>
+              <div className="space-y-5">
+                {overview.restParagraphs?.map((para: string) => (
+                  <p key={para} className="font-sans text-[13px] leading-[1.75] text-[#452C1D]/85">
+                    {para}
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
         </section>
       ) : null}
 
-      {community.amenities ? (
-        <SectionBlock tone="accent">
-          <div className="max-w-full">
-            <h2 className="label font-bold border-b border-foreground/30 pb-2">
-              {community.amenities.heading}
-            </h2>
-            <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:mt-6 sm:text-lg">
-              {community.amenities.intro}
+      {/* ── At a Glance Stats Grid ── */}
+      {amenities ? (
+        <section className="bg-paper-texture border-t border-[#452C1D]/12 py-16 sm:py-24">
+          <div className="mx-auto max-w-[1200px] px-6">
+            <p className="font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-[#452C1D]/65">
+              {amenities.heading}
             </p>
-          </div>
+            <p className="mt-4 max-w-[680px] font-serif text-xl leading-[1.45] text-[#452C1D] sm:text-2xl">
+              {amenities.intro}
+            </p>
 
-          <dl className="mt-10 grid grid-cols-1 sm:mt-12 gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
-            {community.amenities.stats.map((stat: CommunityStat) => {
-              const Icon = icons[stat.icon] ?? Sparkles;
-              return (
-                <div
-                  key={`${stat.label}-${stat.value}`}
-                  className={`flex flex-col gap-3 p-6 ${
-                    stat.highlighted ? "bg-foreground text-background" : "bg-background"
-                  }`}
-                >
-                  <Icon className="size-5" aria-hidden="true" />
-                  <dt className="sr-only">{stat.label}</dt>
-                  <dd className="display text-2xl">{stat.value}</dd>
-                  <p
-                    className={`text-sm ${
-                      stat.highlighted ? "opacity-80" : "text-muted-foreground"
+            <dl className="mt-10 grid grid-cols-1 gap-px border border-[#452C1D]/15 bg-[#452C1D]/15 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4">
+              {amenities.stats.map((stat: CommunityStat) => {
+                const Icon = icons[stat.icon] ?? Sparkles;
+                return (
+                  <div
+                    key={`${stat.label}-${stat.value}`}
+                    className={`flex flex-col gap-3 p-6 ${
+                      stat.highlighted
+                        ? "bg-[#452C1D] text-[#FBFAF7]"
+                        : "bg-[#FBFAF7] text-[#452C1D]"
                     }`}
                   >
-                    {stat.label}
-                  </p>
-                </div>
-              );
-            })}
-          </dl>
-        </SectionBlock>
+                    <Icon
+                      className={`size-5 ${
+                        stat.highlighted ? "text-[#FBFAF7]/85" : "text-[#452C1D]/70"
+                      }`}
+                      aria-hidden="true"
+                    />
+                    <dt className="sr-only">{stat.label}</dt>
+                    <dd className="font-serif text-xl tracking-[0.02em] sm:text-2xl">
+                      {stat.value}
+                    </dd>
+                    <p
+                      className={`font-sans text-xs leading-relaxed ${
+                        stat.highlighted ? "text-[#FBFAF7]/80" : "text-[#452C1D]/70"
+                      }`}
+                    >
+                      {stat.label}
+                    </p>
+                  </div>
+                );
+              })}
+            </dl>
+          </div>
+        </section>
       ) : null}
 
-      <SectionBlock>
-        <div className="flex flex-wrap items-center justify-between gap-6">
-          <p className="display text-xl sm:text-2xl md:text-3xl">Interested in {community.name}?</p>
+      {/* ── Bottom Interest CTA ── */}
+      <section className="border-t border-[#452C1D]/12 bg-[#FBFAF7] py-16 sm:py-20">
+        <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-6 px-6">
+          <div>
+            <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-[#452C1D]/60">
+              {isAr ? p.advisoryKicker : "ADVISORY INQUIRY"}
+            </p>
+            <p
+              className="mt-2 font-serif uppercase tracking-[0.06em] text-[#452C1D]"
+              style={{ fontSize: "clamp(1.25rem, 2vw, 1.65rem)" }}
+            >
+              {isAr ? p.interestedIn(displayName) : `Interested in ${displayName}?`}
+            </p>
+          </div>
           <div className="flex flex-wrap gap-3 sm:gap-4">
-            <Link to="/contact" className="btn-outline">
-              Talk to us
+            <Link
+              to="/contact"
+              style={{
+                borderColor: "var(--color-brown, #452C1D)",
+                color: "var(--color-brown, #452C1D)",
+                textDecoration: "none",
+              }}
+              className="inline-flex items-center justify-center border border-[#452C1D] px-7 py-3 font-sans text-xs font-medium uppercase tracking-[0.16em] text-[#452C1D] transition-colors duration-200 hover:bg-[#452C1D] hover:text-[#FBFAF7]"
+            >
+              {isAr ? commonAr.talkToUs : "Talk to us"}
             </Link>
-            <Link to="/communities" className="btn-outline">
-              All communities
+            <Link
+              to="/communities"
+              style={{
+                borderColor: "var(--color-brown, #452C1D)",
+                color: "var(--color-brown, #452C1D)",
+                textDecoration: "none",
+              }}
+              className="inline-flex items-center justify-center border border-[#452C1D] px-7 py-3 font-sans text-xs font-medium uppercase tracking-[0.16em] text-[#452C1D] transition-colors duration-200 hover:bg-[#452C1D] hover:text-[#FBFAF7]"
+            >
+              {isAr ? commonAr.allCommunities : "All communities"}
             </Link>
           </div>
         </div>
-      </SectionBlock>
+      </section>
     </main>
   );
 }

@@ -101,6 +101,15 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
   --font-serif: "EB Garamond", Georgia, serif;
   --font-sans: "Jost", "Helvetica Neue", Arial, sans-serif;
+  --color-cream: #fbfaf7;
+  --color-brown: #452c1d;
+  --panel-w: min(520px, max(380px, 34vw));
+}
+
+@media (max-width: 899px) {
+  :root {
+    --panel-w: 100vw;
+  }
 }
 
 .dark {
@@ -139,6 +148,10 @@
 }
 
 @layer base {
+  html {
+    font-size: 14px;
+  }
+
   * {
     border-color: var(--color-border);
   }
@@ -193,5 +206,143 @@
   .btn-outline:hover {
     background-color: var(--foreground);
     color: var(--background);
+  }
+
+  /* Paper texture using inline SVG feTurbulence at low opacity */
+  .bg-paper-texture {
+    background-color: var(--color-cream);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+  }
+
+  /* Hero title fade-in entrance */
+  @keyframes heroFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-hero-fade-in {
+    animation: heroFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-hero-fade-in {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}
+
+/* Arabic typography & RTL letter-spacing reset when dir="rtl" or lang="ar" */
+html[lang="ar"],
+[lang="ar"],
+[dir="rtl"] {
+  --font-serif: "Noto Naskh Arabic", "EB Garamond", Georgia, serif;
+  --font-sans: "Noto Naskh Arabic", "Jost", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Noto Naskh Arabic", "Jost", Georgia, serif;
+}
+
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3,
+html[lang="ar"] h4,
+html[lang="ar"] p,
+html[lang="ar"] a,
+html[lang="ar"] span,
+html[lang="ar"] button,
+html[lang="ar"] label,
+html[lang="ar"] input,
+html[lang="ar"] textarea,
+html[lang="ar"] select,
+html[lang="ar"] legend {
+  letter-spacing: 0 !important;
+}
+
+/* Subtle luxury scrollbar for slide-in menu panel */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(69, 44, 29, 0.2);
+  border-radius: 9999px;
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(69, 44, 29, 0.2) transparent;
+}
+
+/* Ensure Explore Communities & Services card links never leak browser link colors */
+.community-card-link,
+.community-card-link:link,
+.community-card-link:visited,
+.community-card-link:hover,
+.community-card-link:active,
+.community-card-link:focus,
+.service-card-link,
+.service-card-link:link,
+.service-card-link:visited,
+.service-card-link:hover,
+.service-card-link:active,
+.service-card-link:focus {
+  color: var(--color-brown, #452c1d) !important;
+  text-decoration: none !important;
+}
+
+/* About Slider Parallax Section */
+.about-parallax {
+  position: relative;
+  min-height: 460px;
+  clip-path: inset(0);
+  overflow: hidden;
+  color: #fff;
+  isolation: isolate;
+}
+
+@media (min-width: 768px) {
+  .about-parallax__bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    will-change: transform;
+  }
+}
+
+@media (max-width: 767px) {
+  .about-parallax__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-parallax__bg {
+    position: absolute !important;
+    inset: 0;
+    z-index: -1;
+  }
+}
+
+.about-parallax__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(8, 20, 35, 0.54) 0%, rgba(8, 20, 35, 0.74) 100%);
+}
+
+@media (max-width: 767px) {
+  .about-parallax__overlay {
+    background: linear-gradient(180deg, rgba(8, 20, 35, 0.6) 0%, rgba(8, 20, 35, 0.78) 100%);
   }
 }

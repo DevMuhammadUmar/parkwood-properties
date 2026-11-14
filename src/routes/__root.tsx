@@ -14,23 +14,35 @@ import { reportError } from "../lib/error-reporting";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFloatingButton } from "@/components/site/WhatsAppButton";
+import { NavProvider } from "@/context/NavContext";
 import { buildRealEstateAgentSchema } from "@/lib/seo";
 
+import { commonAr } from "@/content/i18n";
+
+function isRtlDoc() {
+  return typeof document !== "undefined" && document.documentElement.lang === "ar";
+}
+
 function NotFoundComponent() {
+  const isAr = isRtlDoc();
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#FBFAF7] px-4 text-[#452C1D]">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+        <h1 className="font-serif text-[61px] font-normal text-[#452C1D]">404</h1>
+        <h2 className="mt-4 font-serif text-[19px] uppercase tracking-[0.06em] text-[#452C1D]">
+          {isAr ? commonAr.notFoundTitle : "Page not found"}
+        </h2>
+        <p className="mt-2 font-sans text-sm text-[#452C1D]/80">
+          {isAr
+            ? commonAr.notFoundBody
+            : "The page you're looking for doesn't exist or has been moved."}
         </p>
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center border border-[#452C1D] px-6 py-2.5 font-sans text-xs font-medium uppercase tracking-[0.16em] text-[#452C1D] transition-colors hover:bg-[#452C1D] hover:text-[#FBFAF7]"
           >
-            Go home
+            {isAr ? commonAr.goHome : "Go home"}
           </Link>
         </div>
       </div>
@@ -41,34 +53,38 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const isAr = isRtlDoc();
   useEffect(() => {
     reportError(error);
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#FBFAF7] px-4 text-[#452C1D]">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+        <h1 className="font-serif text-[19px] uppercase tracking-[0.06em] text-[#452C1D]">
+          {isAr ? commonAr.errorTitle : "This page didn't load"}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+        <p className="mt-2 font-sans text-sm text-[#452C1D]/80">
+          {isAr
+            ? commonAr.errorBody
+            : "Something went wrong on our end. You can try refreshing or head back home."}
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button
+            type="button"
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center border border-[#452C1D] px-6 py-2.5 font-sans text-xs font-medium uppercase tracking-[0.16em] text-[#452C1D] transition-colors hover:bg-[#452C1D] hover:text-[#FBFAF7]"
           >
-            Try again
+            {isAr ? commonAr.tryAgain : "Try again"}
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="inline-flex items-center justify-center border border-[#452C1D]/45 px-6 py-2.5 font-sans text-xs font-medium uppercase tracking-[0.16em] text-[#452C1D] transition-colors hover:border-[#452C1D]"
           >
-            Go home
+            {isAr ? commonAr.goHome : "Go home"}
           </a>
         </div>
       </div>
@@ -113,11 +129,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
+      {
+        rel: "preload",
+        as: "image",
+        href: "/assets/hero-poster.jpg",
+      },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", sizes: "48x48" },
       { rel: "icon", type: "image/png", sizes: "48x48", href: "/favicon-48x48.png" },
@@ -174,15 +195,17 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <div className="flex-1">
-          <Outlet />
+      <NavProvider>
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <div id="main-content" className="flex-1">
+            <Outlet />
+          </div>
+          <Footer />
+          <WhatsAppFloatingButton />
         </div>
-        <Footer />
-        <WhatsAppFloatingButton />
-      </div>
+      </NavProvider>
     </QueryClientProvider>
   );
 }

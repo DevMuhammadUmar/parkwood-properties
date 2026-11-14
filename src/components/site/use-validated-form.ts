@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { z } from "zod";
+import { translateValidationMessage } from "@/content/i18n";
+import { useNav } from "@/context/NavContext";
 
 export const emailSchema = z
   .string()
@@ -39,6 +41,8 @@ function emailSubject(formName: string, values: Record<string, string>) {
       return `Feedback — ${name}`;
     case "newsletter":
       return `Newsletter signup — ${values["email"]?.trim() || "Unknown"}`;
+    case "stay-in-touch":
+      return `Stay in touch — ${name}`;
     default:
       return `Form submission — ${formName}`;
   }
@@ -70,6 +74,7 @@ export function useValidatedForm<T extends Record<string, string>>(
   schema: z.ZodType<unknown, z.ZodTypeDef, T>,
   formName: string,
 ) {
+  const { lang } = useNav();
   const [values, setValues] = useState<T>(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
   const [done, setDone] = useState(false);
@@ -89,7 +94,7 @@ export function useValidatedForm<T extends Record<string, string>>(
       const next: Partial<Record<keyof T, string>> = {};
       for (const issue of parsed.error.issues) {
         const key = issue.path[0] as keyof T;
-        if (key && !next[key]) next[key] = issue.message;
+        if (key && !next[key]) next[key] = translateValidationMessage(issue.message, lang);
       }
       setErrors(next);
       return;
@@ -101,7 +106,7 @@ export function useValidatedForm<T extends Record<string, string>>(
       await submitToNetlify(formName, values);
       setDone(true);
     } catch {
-      setSubmitError("Something went wrong. Please try again.");
+      setSubmitError(translateValidationMessage("Something went wrong. Please try again.", lang));
     } finally {
       setPending(false);
     }

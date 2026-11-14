@@ -1,7 +1,12 @@
+import { ChevronDown } from "lucide-react";
 import type { ReactNode } from "react";
+import { commonAr } from "@/content/i18n";
+import { useNav } from "@/context/NavContext";
+
+export type FieldOption = string | { value: string; label: string };
 
 const controlBase =
-  "w-full border border-input bg-background px-4 py-3 text-base outline-none transition-colors focus:border-foreground";
+  "w-full rounded-none border border-[#452C1D]/45 bg-transparent px-4 py-3 font-sans text-sm sm:text-[13px] text-[#452C1D] placeholder:text-[#452C1D]/45 outline-none transition-colors focus:border-[#452C1D] focus-visible:ring-1 focus-visible:ring-[#452C1D]";
 
 /** Hidden form-name + honeypot for Netlify Forms AJAX submissions. */
 export function NetlifyFormMeta({ formName }: { formName: string }) {
@@ -30,12 +35,15 @@ export function Field({
 }) {
   return (
     <div className="space-y-2">
-      <label htmlFor={htmlFor} className="label block text-muted-foreground">
+      <label
+        htmlFor={htmlFor}
+        className="block font-sans text-[11px] font-medium uppercase tracking-[0.16em] text-[#452C1D]/75"
+      >
         {label}
       </label>
       {children}
       {error ? (
-        <p role="alert" className="label text-destructive">
+        <p role="alert" className="font-sans text-xs text-destructive">
           {error}
         </p>
       ) : null}
@@ -116,33 +124,47 @@ export function SelectField({
   onChange,
   options,
   error,
-  placeholder = "Please select",
+  placeholder,
 }: {
   label: string;
   name: string;
   value: string;
   onChange: (v: string) => void;
-  options: string[];
+  options: FieldOption[];
   error?: string | undefined;
   placeholder?: string;
 }) {
+  const { lang } = useNav();
+  const resolvedPlaceholder =
+    placeholder ?? (lang === "ar" ? commonAr.pleaseSelect : "Please select");
+
   return (
     <Field label={label} htmlFor={name} error={error}>
-      <select
-        id={name}
-        name={name}
-        value={value}
-        aria-invalid={Boolean(error)}
-        onChange={(e) => onChange(e.target.value)}
-        className={`${controlBase} appearance-none`}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-      </select>
+      <div className="relative">
+        <select
+          id={name}
+          name={name}
+          value={value}
+          aria-invalid={Boolean(error)}
+          onChange={(e) => onChange(e.target.value)}
+          className={`${controlBase} appearance-none bg-[#FBFAF7] pe-10`}
+        >
+          <option value="">{resolvedPlaceholder}</option>
+          {options.map((opt) => {
+            const val = typeof opt === "string" ? opt : opt.value;
+            const lbl = typeof opt === "string" ? opt : opt.label;
+            return (
+              <option key={val} value={val}>
+                {lbl}
+              </option>
+            );
+          })}
+        </select>
+        <ChevronDown
+          aria-hidden="true"
+          className="pointer-events-none absolute end-3.5 top-1/2 size-4 -translate-y-1/2 text-[#452C1D]/65"
+        />
+      </div>
     </Field>
   );
 }
@@ -159,35 +181,39 @@ export function RadioField({
   name: string;
   value: string;
   onChange: (v: string) => void;
-  options: string[];
+  options: FieldOption[];
   error?: string | undefined;
 }) {
   return (
     <fieldset className="space-y-3">
-      <legend className="label text-muted-foreground">{label}</legend>
+      <legend className="font-sans text-[11px] font-medium uppercase tracking-[0.16em] text-[#452C1D]/75">
+        {label}
+      </legend>
       <input type="hidden" name={name} value={value} />
       <div className="flex flex-wrap gap-3">
-        {options.map((o) => {
-          const active = value === o;
+        {options.map((opt) => {
+          const val = typeof opt === "string" ? opt : opt.value;
+          const lbl = typeof opt === "string" ? opt : opt.label;
+          const active = value === val;
           return (
             <button
-              key={o}
+              key={val}
               type="button"
               aria-pressed={active}
-              onClick={() => onChange(o)}
-              className={`label border px-5 py-3 transition-colors ${
+              onClick={() => onChange(val)}
+              className={`rounded-none border px-6 py-3 font-sans text-xs font-medium uppercase tracking-[0.16em] transition-colors ${
                 active
-                  ? "border-foreground bg-foreground text-background"
-                  : "border-input hover:border-foreground"
+                  ? "border-[#452C1D] bg-[#452C1D] text-[#FBFAF7]"
+                  : "border-[#452C1D]/45 text-[#452C1D] hover:border-[#452C1D]"
               }`}
             >
-              {o}
+              {lbl}
             </button>
           );
         })}
       </div>
       {error ? (
-        <p role="alert" className="label text-destructive">
+        <p role="alert" className="font-sans text-xs text-destructive">
           {error}
         </p>
       ) : null}
@@ -196,11 +222,21 @@ export function RadioField({
 }
 
 export function FormSuccess({ title, body }: { title: string; body: string }) {
+  const { lang } = useNav();
   return (
-    <div role="status" className="border border-foreground/20 bg-accent px-6 py-10 text-center">
-      <p className="label text-muted-foreground">Thank you</p>
-      <h3 className="display mt-3 text-2xl">{title}</h3>
-      <p className="mt-3 text-base leading-relaxed text-muted-foreground">{body}</p>
+    <div
+      role="status"
+      className="border border-[#452C1D]/25 bg-[#452C1D]/[0.03] px-6 py-10 text-center"
+    >
+      <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-[#452C1D]/70">
+        {lang === "ar" ? commonAr.thankYou : "Thank you"}
+      </p>
+      <h3 className="mt-3 font-serif text-[19px] uppercase tracking-[0.06em] text-[#452C1D]">
+        {title}
+      </h3>
+      <p className="mx-auto mt-3 max-w-lg font-sans text-sm leading-relaxed text-[#452C1D]/85">
+        {body}
+      </p>
     </div>
   );
 }

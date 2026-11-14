@@ -104,6 +104,52 @@ export const communityDetails: CommunityDetail[] = [
       ],
     },
   }),
+  seed("dubai-marina", {
+    overview: {
+      heading: "DUBAI MARINA",
+      paragraphs: [
+        "Dubai Marina is an affluent waterfront neighborhood known for its high-rise luxury towers, yacht berths, and scenic 7 km pedestrian promenade Dubai Marina Walk.",
+        "With Dubai Marina Mall, waterfront dining, and direct tram and metro connectivity, it offers unmatched urban marina lifestyle in the heart of new Dubai.",
+      ],
+      restHeading: "Lifestyle & Amenities",
+      restParagraphs: [
+        "Residents enjoy immediate access to yacht charters, waterfront cafes, wellness clubs, and the golden shores of JBR Beach just moments away.",
+      ],
+    },
+    amenities: {
+      heading: "At a Glance",
+      intro: "Discover the highlights that make Dubai Marina a premier waterfront destination.",
+      stats: [
+        { icon: "pool", value: "7 km", label: "Marina Promenade Walk" },
+        { icon: "retail", value: "Dubai Marina Mall", label: "Shopping & Dining Hub" },
+        { icon: "building", value: "200+", label: "Luxury High-Rise Towers" },
+        { icon: "area", value: "Yacht Berths", label: "World-Class Marina Berthing" },
+      ],
+    },
+  }),
+  seed("palm-jumeirah", {
+    overview: {
+      heading: "PALM JUMEIRAH",
+      paragraphs: [
+        "Palm Jumeirah is a world-renowned palm tree-shaped archipelago featuring ultra-luxury beachfront villas, penthouses, and world-class resort hotels.",
+        "Offering direct private beach access, panoramic Arabian Gulf views, and iconic destinations including Atlantis, The Palm and Nakheel Mall.",
+      ],
+      restHeading: "Island Living",
+      restParagraphs: [
+        "From Michelin-starred dining to peaceful shoreline strolls, Palm Jumeirah represents the absolute peak of coastal luxury real estate.",
+      ],
+    },
+    amenities: {
+      heading: "At a Glance",
+      intro: "Iconic highlights of luxury island living on Palm Jumeirah.",
+      stats: [
+        { icon: "pool", value: "Private Beaches", label: "Direct Sea Access" },
+        { icon: "building", value: "Atlantis", label: "Iconic Luxury Resort" },
+        { icon: "retail", value: "Nakheel Mall", label: "Curated Retail & Dining" },
+        { icon: "area", value: "Arabian Gulf", label: "Panoramic Open Sea Views" },
+      ],
+    },
+  }),
   seed("the-valley", {
     overview: {
       heading: "THE VALLEY",

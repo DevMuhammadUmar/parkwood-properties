@@ -1,5 +1,7 @@
 import type { SVGProps } from "react";
+import { commonAr } from "@/content/i18n";
 import { company } from "@/content/site";
+import { useNav } from "@/context/NavContext";
 
 export function WhatsAppIcon({ className = "size-5", ...props }: SVGProps<SVGSVGElement>) {
   return (
@@ -20,21 +22,25 @@ export function WhatsAppIcon({ className = "size-5", ...props }: SVGProps<SVGSVG
  * Provides instant contact with property advisors across all pages.
  */
 export function WhatsAppFloatingButton() {
+  const { lang } = useNav();
+  const label = lang === "ar" ? commonAr.whatsappChat : "Chat on WhatsApp";
+  const aria = lang === "ar" ? commonAr.whatsappAria : "Chat with Parkwood Properties on WhatsApp";
+
   return (
     <aside
-      aria-label="Instant WhatsApp contact"
-      className="fixed bottom-5 right-5 z-40 print:hidden sm:bottom-6 sm:right-6"
+      aria-label={aria}
+      className="fixed bottom-5 right-5 rtl:right-auto rtl:left-5 z-[110] print:hidden sm:bottom-6 sm:right-6 rtl:sm:right-auto rtl:sm:left-6"
     >
       <a
         href={company.whatsappHref}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Chat with Parkwood Properties on WhatsApp"
+        aria-label={aria}
         className="group flex items-center justify-center rounded-full bg-[#25D366] p-3.5 text-white shadow-[0_4px_20px_rgba(37,211,102,0.38)] transition-all duration-300 ease-out hover:scale-110 hover:bg-[#20ba59] hover:px-4.5 hover:shadow-[0_8px_30px_rgba(37,211,102,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 active:scale-95"
       >
         <WhatsAppIcon className="size-6 shrink-0 transition-transform duration-300 group-hover:scale-105" />
-        <span className="max-w-0 overflow-hidden whitespace-nowrap text-sm font-semibold tracking-wide opacity-0 transition-all duration-300 ease-out group-hover:max-w-44 group-hover:pl-2 group-hover:opacity-100">
-          Chat on WhatsApp
+        <span className="max-w-0 overflow-hidden whitespace-nowrap text-sm font-semibold tracking-wide opacity-0 transition-all duration-300 ease-out group-hover:max-w-44 group-hover:ps-2 group-hover:opacity-100">
+          {label}
         </span>
       </a>
     </aside>

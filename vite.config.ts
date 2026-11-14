@@ -19,6 +19,12 @@ export default defineConfig({
       port: 3000,
       strictPort: true,
     },
+    resolve: {
+      dedupe: ["react", "react-dom"],
+    },
+    optimizeDeps: {
+      include: ["react", "react-dom", "@tanstack/react-router"],
+    },
   },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
