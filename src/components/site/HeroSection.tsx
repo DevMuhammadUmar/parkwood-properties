@@ -189,21 +189,23 @@ export function VideoHero() {
   };
   */
 
-  // Performance & reduced motion check
+  // Performance & reduced motion check (allow mobile playback unless save-data or reduced motion)
   useEffect(() => {
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     setIsReducedMotion(motionQuery.matches);
 
     const handleMotionChange = (e: MediaQueryListEvent) => {
       setIsReducedMotion(e.matches);
+      if (e.matches) {
+        setShouldLoadVideo(false);
+      }
     };
     motionQuery.addEventListener("change", handleMotionChange);
 
     const nav = navigator as unknown as { connection?: { saveData?: boolean } };
     const isSaveData = Boolean(nav.connection?.saveData);
-    const isMobile = window.innerWidth < 768;
 
-    if (isSaveData || isMobile || motionQuery.matches) {
+    if (isSaveData || motionQuery.matches) {
       setShouldLoadVideo(false);
     } else {
       setShouldLoadVideo(true);
@@ -213,6 +215,27 @@ export function VideoHero() {
       motionQuery.removeEventListener("change", handleMotionChange);
     };
   }, []);
+
+  // Ensure muted + playsInline DOM properties and kick off autoplay reliably on iOS/Android
+  useEffect(() => {
+    if (!shouldLoadVideo) return;
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.defaultMuted = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.setAttribute("muted", "");
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Fallback poster underneath remains visible if device Low Power Mode blocks autoplay
+      });
+    }
+  }, [shouldLoadVideo]);
 
   // Loop smoothing: fade out video ~0.5s before end, fade back in at start
   const handleTimeUpdate = () => {
@@ -240,6 +263,10 @@ export function VideoHero() {
     setVideoOpacity(1);
   };
 
+  const handlePlaying = () => {
+    setVideoOpacity(1);
+  };
+
   return (
     <section
       aria-label={t.sectionLabel}
@@ -263,16 +290,19 @@ export function VideoHero() {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
+          disablePictureInPicture
+          disableRemotePlayback
           poster="/assets/hero-poster.jpg"
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleEnded}
           onSeeked={handleSeeked}
+          onPlaying={handlePlaying}
           style={{ opacity: videoOpacity }}
           className="absolute inset-0 z-0 h-full w-full object-cover transition-opacity duration-500 ease-out motion-reduce:transition-none"
         >
-          <source src="/assets/hero.webm" type="video/webm" />
           <source src="/assets/hero.mp4" type="video/mp4" />
+          <source src="/assets/hero.webm" type="video/webm" />
         </video>
       )}
 

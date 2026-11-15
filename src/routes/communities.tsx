@@ -55,12 +55,11 @@ function CommunitiesPage() {
   return (
     <main className="bg-[#FBFAF7] pt-[72px] text-[#452C1D]">
       <PageHero
-        kicker={isAr ? p.heroKicker : "Communities"}
-        title={isAr ? p.heroTitle : "Emaar masterplans, read closely"}
+        title={isAr ? p.heroTitle : "Discover Dubai, community by community"}
         body={
           isAr
             ? p.heroBody
-            : "Communities we know well — their orientation, their architecture and how each one actually lives."
+            : "From established neighbourhoods to exclusive new developments, explore the communities that define Dubai's premium lifestyle. We know what makes each location distinctive — from its architecture and surroundings to its lifestyle and investment potential."
         }
         image="/dubai creek.avif"
         imageAlt={isAr ? p.heroImageAlt : "Dubai Creek Harbour waterfront promenade and skyline"}
@@ -72,23 +71,16 @@ function CommunitiesPage() {
         style={{ backgroundColor: "var(--color-cream, #FBFAF7)" }}
       >
         <div className="mx-auto max-w-[1200px] px-6">
-          <div className="flex flex-wrap items-baseline justify-between gap-4">
-            <h2
-              id="all-communities-heading"
-              className="font-serif uppercase leading-tight tracking-[0.1em] text-[#452C1D]"
-              style={{
-                fontSize: "clamp(1.45rem, 2.5vw, 2rem)",
-                color: "var(--color-brown, #452C1D)",
-              }}
-            >
-              {isAr ? p.heading : "DUBAI COMMUNITIES"}
-            </h2>
-            <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-[#452C1D]/65">
-              {isAr
-                ? p.districtsCountLabel(communities.length)
-                : `${communities.length} MASTERPLANNED DISTRICTS`}
-            </p>
-          </div>
+          <h2
+            id="all-communities-heading"
+            className="font-serif uppercase leading-tight tracking-[0.1em] text-[#452C1D]"
+            style={{
+              fontSize: "clamp(1.45rem, 2.5vw, 2rem)",
+              color: "var(--color-brown, #452C1D)",
+            }}
+          >
+            {isAr ? p.heading : "DUBAI COMMUNITIES"}
+          </h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-5 gap-y-12 border-t border-[#452C1D]/15 pt-10 sm:grid-cols-2 lg:grid-cols-3">
             {communities.map((community, idx) => (

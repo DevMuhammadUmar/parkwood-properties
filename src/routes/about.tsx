@@ -62,7 +62,6 @@ function AboutPage() {
   const values = isAr ? aboutAr.values : about.values;
   const closing = isAr ? aboutAr.closing : about.closing;
   const howWeWorkTitle = isAr ? aboutAr.howWeWorkTitle : "How we work";
-  const storyBadge = isAr ? aboutAr.story.badge : "DUBAI · SECONDARY & DEVELOPMENT";
 
   return (
     <main className="bg-[#FBFAF7] pt-[72px] text-[#452C1D]">
@@ -179,27 +178,6 @@ function AboutPage() {
                 height={900}
                 className="block h-full w-full object-cover"
               />
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-0 h-[32%]"
-                style={{
-                  background:
-                    "linear-gradient(to bottom, rgba(0, 0, 0, 0.32) 0%, transparent 100%)",
-                }}
-              />
-              <span
-                style={{
-                  top: "14px",
-                  insetInlineEnd: "16px",
-                  color: "var(--color-cream, #FBFAF7)",
-                  letterSpacing: "0.15em",
-                  fontSize: "11px",
-                  textShadow: "0 1px 8px rgba(0, 0, 0, 0.5)",
-                }}
-                className="pointer-events-none absolute top-3.5 end-4 z-10 font-sans font-medium uppercase leading-none select-none"
-              >
-                {storyBadge}
-              </span>
             </div>
 
             <div className="flex flex-col justify-center">

@@ -66,12 +66,11 @@ function ServicesPage() {
   return (
     <main className="bg-[#FBFAF7] pt-[72px] text-[#452C1D]">
       <PageHero
-        kicker={isAr ? p.heroKicker : "Services"}
-        title={isAr ? p.heroTitle : "Five ways we work with you"}
+        title={isAr ? p.heroTitle : "Real estate, managed around you"}
         body={
           isAr
             ? p.heroBody
-            : "From first viewing to keys in hand — buying, selling, renting, financing and handover, all handled in-house."
+            : "From finding the right property to making your next move, we provide considered guidance across buying, selling, renting and property investment — with support at every stage of the process."
         }
         image="/assets/hero-poster.jpg"
         imageAlt={isAr ? p.heroImageAlt : "Downtown Dubai skyline at golden hour"}

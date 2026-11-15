@@ -238,27 +238,17 @@ function CommunityDetailPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <div className="grid gap-10 lg:grid-cols-[0.42fr_0.58fr] lg:gap-16">
             <div>
-              <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-[#452C1D]/60">
-                {isAr ? p.overviewKicker : "COMMUNITY OVERVIEW"}
-              </p>
               <h2
-                className="mt-3 font-serif uppercase leading-tight tracking-[0.08em] text-[#452C1D]"
+                className="font-serif uppercase leading-tight tracking-[0.08em] text-[#452C1D]"
                 style={{ fontSize: "clamp(1.35rem, 2.2vw, 1.8rem)" }}
               >
-                {overview.heading}
+                {isAr ? p.overviewKicker : "COMMUNITY OVERVIEW"}
               </h2>
             </div>
 
             <div className="space-y-5">
-              {overview.paragraphs.map((para: string, idx: number) => (
-                <p
-                  key={para}
-                  className={
-                    idx === 0
-                      ? "font-serif text-xl leading-[1.5] text-[#452C1D] sm:text-2xl"
-                      : "font-sans text-[13px] leading-[1.75] text-[#452C1D]/85"
-                  }
-                >
+              {overview.paragraphs.map((para: string) => (
+                <p key={para} className="font-sans text-[13px] leading-[1.75] text-[#452C1D]/85">
                   {para}
                 </p>
               ))}

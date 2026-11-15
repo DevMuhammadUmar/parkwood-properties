@@ -299,7 +299,6 @@ export function ExploreCommunities() {
           {featuredCommunities.map((community, idx) => {
             const ar = lang === "ar" ? communitiesAr[community.slug] : undefined;
             const displayName = ar?.name ?? community.name;
-            const displayLabel = ar?.label ?? community.label;
             const displayDescriptor = ar?.descriptor ?? community.descriptor;
             const displayStats = ar?.stats ?? community.stats;
 
@@ -329,61 +328,35 @@ export function ExploreCommunities() {
                     className="block h-full w-full object-cover rounded-none transition-transform duration-600 ease-out group-hover:scale-[1.04] motion-reduce:group-hover:scale-100"
                   />
 
-                  {/* Subtle top-to-transparent gradient (~35% height) */}
+                  {/* Subtle top-to-transparent gradient (~38% height) for top-right title contrast */}
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-x-0 top-0 h-[35%]"
+                    className="pointer-events-none absolute inset-x-0 top-0 h-[38%]"
                     style={{
                       background:
-                        "linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0%, transparent 100%)",
+                        "linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, transparent 100%)",
                     }}
                   />
 
-                  {/* Top-inline-end label over image, ~11px uppercase cream */}
-                  <span
+                  {/* Top-inline-end community name over image */}
+                  <h3
                     style={{
                       top: "14px",
                       insetInlineEnd: "16px",
                       color: "var(--color-cream, #FBFAF7)",
-                      letterSpacing: "0.15em",
-                      fontSize: "11px",
-                      textShadow: "0 1px 8px rgba(0, 0, 0, 0.5)",
+                      letterSpacing: "0.14em",
+                      textShadow: "0 1px 10px rgba(0, 0, 0, 0.55)",
                     }}
-                    className="pointer-events-none absolute top-3.5 end-4 z-10 font-sans font-medium uppercase select-none leading-none"
+                    className="pointer-events-none absolute top-3.5 end-4 z-10 max-w-[calc(100%-2rem)] truncate font-serif text-[12px] sm:text-[13px] font-medium uppercase select-none leading-none"
                   >
-                    {displayLabel}
-                  </span>
+                    {displayName}
+                  </h3>
                 </div>
 
-                {/* Card Details with specified vertical spacing and colors */}
-                <div className="pt-4 text-start">
-                  {/* 1. Community Name: serif uppercase, ~0.12em letter spacing, clamp(1.1rem, 1.6vw, 1.4rem), line-height 1.2, fits ONE line */}
-                  <div className="relative inline-block max-w-full">
-                    <h3
-                      className="font-serif uppercase truncate"
-                      style={{
-                        color: "var(--color-brown, #452C1D)",
-                        fontSize: "calc(clamp(1.1rem, 1.6vw, 1.4rem) - 2px)",
-                        lineHeight: 1.2,
-                        letterSpacing: "0.12em",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {displayName}
-                    </h3>
-                    <span
-                      aria-hidden="true"
-                      style={{
-                        insetInlineStart: 0,
-                        backgroundColor: "var(--color-brown, #452C1D)",
-                      }}
-                      className="absolute bottom-0 start-0 h-[1px] w-0 transition-[width] duration-300 ease-out group-hover:w-full group-focus-visible:w-full motion-reduce:transition-none"
-                    />
-                  </div>
-
-                  {/* 2. Descriptor: existing sans uppercase, ~12px, letter spacing ~0.1em, 2 lines max */}
+                {/* Card Details: descriptor & stat highlights */}
+                <div className="pt-3.5 text-start">
                   <p
-                    className="mt-2 font-sans uppercase line-clamp-2 leading-normal"
+                    className="font-sans uppercase line-clamp-2 leading-normal transition-opacity duration-200 group-hover:opacity-75"
                     style={{
                       color: "rgba(69, 44, 29, 0.85)",
                       fontSize: "12px",
@@ -393,9 +366,8 @@ export function ExploreCommunities() {
                     {displayDescriptor}
                   </p>
 
-                  {/* 3. Stat line: ~11px uppercase, letter spacing ~0.1em, " | " separators */}
                   <p
-                    className="mt-2.5 font-sans uppercase leading-normal"
+                    className="mt-2 font-sans uppercase leading-normal"
                     style={{
                       color: "rgba(69, 44, 29, 0.65)",
                       fontSize: "11px",
