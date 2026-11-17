@@ -92,7 +92,7 @@ export function OurServices() {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const rafIdRef = useRef<number | null>(null);
 
-  const [hasEntered, setHasEntered] = useState(false);
+  const [hasEntered, setHasEntered] = useState(true);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
 
   // Carousel scroll metrics: whether track can scroll backwards/forwards
@@ -100,31 +100,10 @@ export function OurServices() {
   // Default canScrollNext to true if more than 3 services exist
   const [canScrollNext, setCanScrollNext] = useState(featuredServices.length > 3);
 
-  // Viewport entrance observer (staggered 80ms fade-in and 16px rise)
+  // Respect reduced-motion preference
   useEffect(() => {
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     setIsReducedMotion(motionQuery.matches);
-
-    if (motionQuery.matches) {
-      setHasEntered(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setHasEntered(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 },
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
   }, []);
 
   // Compute disabled state from the track's actual overflow

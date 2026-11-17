@@ -7,8 +7,8 @@ import { useNav } from "@/context/NavContext";
 import { buildBreadcrumbSchema, buildHead, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    ...buildHead({
+  head: () =>
+    buildHead({
       title: "About Us | Dubai Real Estate Consultancy | Parkwood Properties",
       description:
         "Learn about Parkwood Properties, a Dubai real estate consultancy specializing in secondary market residential property across Emaar's masterplanned communities.",
@@ -18,37 +18,31 @@ export const Route = createFileRoute("/about")({
           { name: "Home", path: "/" },
           { name: "About Us", path: "/about" },
         ]),
-      ],
-    }),
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
+        {
           "@context": "https://schema.org",
           "@type": "AboutPage",
-          "@id": "https://parkwoodproperties.ae/about#webpage",
+          "@id": `${SITE_URL}/about#webpage`,
           name: "About Us | Parkwood Properties Dubai",
           url: `${SITE_URL}/about`,
           description:
             "Learn about Parkwood Properties, a Dubai real estate consultancy specializing in secondary market residential property across Emaar's masterplanned communities.",
           isPartOf: {
             "@type": "WebSite",
-            "@id": "https://parkwoodproperties.ae/#website",
+            "@id": `${SITE_URL}/#website`,
             name: "Parkwood Properties Dubai",
             url: SITE_URL,
           },
           mainEntity: {
             "@type": "RealEstateAgent",
-            "@id": "https://parkwoodproperties.ae/#organization",
+            "@id": `${SITE_URL}/#organization`,
             name: "Parkwood Properties Dubai",
             url: SITE_URL,
             email: company.email,
             areaServed: "Dubai, United Arab Emirates",
           },
-        }),
-      },
-    ],
-  }),
+        },
+      ],
+    }),
   component: AboutPage,
 });
 

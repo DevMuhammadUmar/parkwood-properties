@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHero, SectionBlock } from "@/components/site/sections";
 import { pagesAr } from "@/content/i18n";
 import { useNav } from "@/context/NavContext";
-import { buildHead } from "@/lib/seo";
+import { buildBreadcrumbSchema, buildHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/terms-and-conditions")({
   head: () =>
@@ -12,6 +12,12 @@ export const Route = createFileRoute("/terms-and-conditions")({
       description:
         "Review the terms and conditions governing the use of the Parkwood Properties website and our professional Dubai real estate advisory services.",
       path: "/terms-and-conditions",
+      schemas: [
+        buildBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Terms & Conditions", path: "/terms-and-conditions" },
+        ]),
+      ],
     }),
   component: TermsPage,
 });

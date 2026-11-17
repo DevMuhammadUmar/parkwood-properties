@@ -44,12 +44,58 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+function getCanonicalRedirect(request: Request): Response | null {
+  if (request.method !== "GET" && request.method !== "HEAD") return null;
+
+  const url = new URL(request.url);
+  let shouldRedirect = false;
+
+  // Redirect www.parkwoodproperties.ae -> parkwoodproperties.ae (301 permanent)
+  if (url.hostname === "www.parkwoodproperties.ae") {
+    url.hostname = "parkwoodproperties.ae";
+    url.protocol = "https:";
+    shouldRedirect = true;
+  }
+
+  // Permanently redirect non-root trailing slashes (/about/ -> /about) instead of 307
+  if (url.pathname.length > 1 && url.pathname.endsWith("/")) {
+    url.pathname = url.pathname.replace(/\/+$/, "") || "/";
+    shouldRedirect = true;
+  }
+
+  if (!shouldRedirect) return null;
+
+  return new Response(null, {
+    status: 301,
+    headers: {
+      location: url.toString(),
+      "cache-control": "public, max-age=3600",
+    },
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const redirect = getCanonicalRedirect(request);
+      if (redirect) return redirect;
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+
+      const url = new URL(request.url);
+      if (url.pathname === "/__forms.html") {
+        const headers = new Headers(normalized.headers);
+        headers.set("x-robots-tag", "noindex, nofollow");
+        return new Response(normalized.body, {
+          status: normalized.status,
+          statusText: normalized.statusText,
+          headers,
+        });
+      }
+
+      return normalized;
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {

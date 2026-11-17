@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
 
 import { featuredCommunities } from "@/components/site/ExploreCommunities";
 import { communitiesAr } from "@/content/i18n";
@@ -16,8 +15,6 @@ const metaBySlug = new Map(featuredCommunities.map((c) => [c.slug, c]));
  */
 export function CommunityCard({ community, index = 0 }: { community: Community; index?: number }) {
   const { lang } = useNav();
-  const [isVisible, setIsVisible] = useState(false);
-  const cardRef = useRef<HTMLDivElement | null>(null);
 
   const meta = metaBySlug.get(community.slug);
   const ar = lang === "ar" ? communitiesAr[community.slug] : undefined;
@@ -30,40 +27,10 @@ export function CommunityCard({ community, index = 0 }: { community: Community; 
     meta?.stats ??
     (lang === "ar" ? "مخطط رئيسي من إعمار | تملك حر" : "EMAAR MASTERPLAN | FREEHOLD");
 
-  useEffect(() => {
-    const el = cardRef.current;
-    if (!el) return;
-
-    if (typeof IntersectionObserver === "undefined") {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -30px 0px" },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <div
-      ref={cardRef}
-      className={`transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none ${
-        isVisible
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-4 motion-reduce:opacity-100 motion-reduce:translate-y-0"
-      }`}
-      style={{
-        transitionDelay: isVisible ? `${(index % 6) * 70}ms` : "0ms",
-      }}
+      data-card-index={index}
+      className="opacity-100 translate-y-0 transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none"
     >
       <article>
         <Link

@@ -464,7 +464,7 @@ export function Header() {
                         {t.viewAllCommunities}
                       </Link>
                     </li>
-                    {communityList.slice(0, 7).map((c) => (
+                    {communityList.map((c) => (
                       <li key={c.slug}>
                         <Link
                           to="/communities/$slug"

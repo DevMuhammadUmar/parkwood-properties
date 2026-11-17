@@ -22,20 +22,21 @@ import { WhatsAppIcon } from "@/components/site/WhatsAppButton";
 import { commonAr, pagesAr } from "@/content/i18n";
 import { company, inquiryTypes } from "@/content/site";
 import { useNav } from "@/context/NavContext";
-import { buildHead, SITE_URL } from "@/lib/seo";
+import { buildBreadcrumbSchema, buildHead, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    ...buildHead({
+  head: () =>
+    buildHead({
       title: "Contact Real Estate Advisors in Dubai | Parkwood Properties",
       description:
         "Connect with Parkwood Properties in Dubai for luxury residential purchases, off-plan investment guidance, or appraisals. Our team responds within one working day.",
       path: "/contact",
-    }),
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
+      schemas: [
+        buildBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Contact Us", path: "/contact" },
+        ]),
+        {
           "@context": "https://schema.org",
           "@type": "ContactPage",
           name: "Contact Parkwood Properties Dubai",
@@ -43,8 +44,8 @@ export const Route = createFileRoute("/contact")({
           description:
             "Connect with Parkwood Properties in Dubai for luxury residential purchases, off-plan investment guidance, or appraisals.",
           mainEntity: {
-            "@context": "https://schema.org",
             "@type": ["RealEstateAgent", "LocalBusiness"],
+            "@id": `${SITE_URL}/#organization`,
             name: company.name,
             url: SITE_URL,
             telephone: company.phone,
@@ -75,10 +76,9 @@ export const Route = createFileRoute("/contact")({
               longitude: 55.2708,
             },
           },
-        }),
-      },
-    ],
-  }),
+        },
+      ],
+    }),
   component: ContactPage,
 });
 
@@ -280,6 +280,26 @@ function ContactPage() {
               <p className="mt-2.5 inline-flex items-center gap-2.5 font-sans text-sm text-[#452C1D]/85">
                 <MapPin className="size-3.5 shrink-0 text-[#452C1D]/70" />
                 <span>{isAr ? p.locationValue : "Dubai, United Arab Emirates"}</span>
+              </p>
+            </div>
+
+            <div className="border-t border-[#452C1D]/12 pt-6">
+              <h2 className="font-serif text-[12px] uppercase tracking-[0.14em] text-[#452C1D]">
+                {isAr ? p.advisoryHoursHeading : "Advisory Hours"}
+              </h2>
+              <p className="mt-2.5 font-sans text-[13px] leading-relaxed text-[#452C1D]/80">
+                {isAr ? p.advisoryHoursValue : "Monday – Sunday, 9:00 AM – 7:00 PM GST (Dubai)"}
+              </p>
+            </div>
+
+            <div className="border-t border-[#452C1D]/12 pt-6">
+              <h2 className="font-serif text-[12px] uppercase tracking-[0.14em] text-[#452C1D]">
+                {isAr ? p.advisoryNoteHeading : "How We Help"}
+              </h2>
+              <p className="mt-2.5 font-sans text-[13px] leading-[1.7] text-[#452C1D]/80">
+                {isAr
+                  ? p.advisoryNoteBody
+                  : "Our Dubai property advisors handle secondary market acquisitions, sales marketing, residential leasing, mortgage coordination, and Emaar handover snagging across Downtown Dubai, Dubai Hills Estate, Dubai Creek Harbour, Emaar Beachfront, Palm Jumeirah, and Dubai Marina."}
               </p>
             </div>
           </aside>

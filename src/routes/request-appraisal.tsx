@@ -26,8 +26,8 @@ import { useNav } from "@/context/NavContext";
 import { buildBreadcrumbSchema, buildHead, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/request-appraisal")({
-  head: () => ({
-    ...buildHead({
+  head: () =>
+    buildHead({
       title: "Property Valuation & Real Estate Appraisal Dubai | Parkwood Properties",
       description:
         "Request an accurate sale or rental property appraisal in Dubai. Our advisors evaluate comparable market data to provide honest valuation guidance for your home.",
@@ -37,22 +37,16 @@ export const Route = createFileRoute("/request-appraisal")({
           { name: "Home", path: "/" },
           { name: "Request Appraisal", path: "/request-appraisal" },
         ]),
-      ],
-    }),
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
+        {
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "Property Valuation & Appraisal in Dubai",
           url: `${SITE_URL}/request-appraisal`,
           description:
             "Request an accurate sale or rental property appraisal in Dubai. Our advisors evaluate comparable market data to provide honest valuation guidance for your home.",
-        }),
-      },
-    ],
-  }),
+        },
+      ],
+    }),
   component: RequestAppraisalPage,
 });
 
@@ -298,6 +292,17 @@ function RequestAppraisalPage() {
                   <Mail className="size-3.5 shrink-0 text-[#452C1D]" />
                   <span>{company.email}</span>
                 </a>
+              </p>
+            </div>
+
+            <div className="border-t border-[#452C1D]/15 pt-6">
+              <p className="font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-[#452C1D]/60">
+                {isAr ? p.coverageHeading : "VALUATION COVERAGE"}
+              </p>
+              <p className="mt-3 font-sans text-[13px] leading-[1.7] text-[#452C1D]/80">
+                {isAr
+                  ? p.coverageBody
+                  : "We prepare data-backed sale and rental valuations for apartments, townhouses, and villas across Downtown Dubai, Dubai Hills Estate, Dubai Creek Harbour, Emaar Beachfront, Arabian Ranches III, The Valley, Palm Jumeirah, and Dubai Marina."}
               </p>
             </div>
           </aside>

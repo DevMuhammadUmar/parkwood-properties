@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHero, SectionBlock } from "@/components/site/sections";
 import { pagesAr } from "@/content/i18n";
 import { useNav } from "@/context/NavContext";
-import { buildHead } from "@/lib/seo";
+import { buildBreadcrumbSchema, buildHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/privacy-policy")({
   head: () =>
@@ -12,6 +12,12 @@ export const Route = createFileRoute("/privacy-policy")({
       description:
         "Read the Parkwood Properties Privacy Policy to understand how we collect, handle, and safeguard your personal data across our Dubai real estate website and services.",
       path: "/privacy-policy",
+      schemas: [
+        buildBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Privacy Policy", path: "/privacy-policy" },
+        ]),
+      ],
     }),
   component: PrivacyPolicyPage,
 });

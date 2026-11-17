@@ -10,8 +10,8 @@ import { buildBreadcrumbSchema, buildHead, SITE_URL } from "@/lib/seo";
 const metaBySlug = new Map(featuredServices.map((s) => [s.slug, s]));
 
 export const Route = createFileRoute("/services")({
-  head: () => ({
-    ...buildHead({
+  head: () =>
+    buildHead({
       title: "Real Estate Advisory & Property Services Dubai | Parkwood Properties",
       description:
         "Comprehensive Dubai real estate services: luxury property acquisition, sales marketing, residential leasing, independent mortgage advisory, and Emaar handover snagging.",
@@ -21,17 +21,13 @@ export const Route = createFileRoute("/services")({
           { name: "Home", path: "/" },
           { name: "Services", path: "/services" },
         ]),
-      ],
-    }),
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
+        {
           "@context": "https://schema.org",
           "@type": "Service",
           serviceType: "Real Estate Advisory",
           provider: {
             "@type": "RealEstateAgent",
+            "@id": `${SITE_URL}/#organization`,
             name: "Parkwood Properties Dubai",
             url: SITE_URL,
           },
@@ -51,10 +47,9 @@ export const Route = createFileRoute("/services")({
               },
             })),
           },
-        }),
-      },
-    ],
-  }),
+        },
+      ],
+    }),
   component: ServicesPage,
 });
 

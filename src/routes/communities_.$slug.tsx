@@ -15,9 +15,10 @@ import type { ComponentType } from "react";
 
 import type { CommunityStat } from "@/content/communities";
 import { getCommunityDetail } from "@/content/communities";
-import { commonAr, communityDetailsAr, pagesAr } from "@/content/i18n";
+import { commonAr, communitiesAr, communityDetailsAr, pagesAr } from "@/content/i18n";
+import { communities } from "@/content/site";
 import { useNav } from "@/context/NavContext";
-import { absoluteUrl, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
+import { absoluteUrl, buildHead, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 
 const icons: Record<string, ComponentType<{ className?: string }>> = {
   area: LandPlot,
@@ -54,66 +55,53 @@ export const Route = createFileRoute("/communities_/$slug")({
           `${community.name} — premier Dubai masterplanned community guide by Parkwood Properties.`;
     const title = `${community.name} Luxury Properties & Community Guide | Parkwood Properties Dubai`;
     const communityUrl = absoluteUrl(`/communities/${community.slug}`);
-    const shareImage = community.heroImage ? absoluteUrl(community.heroImage) : DEFAULT_OG_IMAGE;
-    return {
-      meta: [
-        { title },
-        { name: "description", content: description },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:type", content: "article" },
-        { property: "og:url", content: communityUrl },
-        { property: "og:site_name", content: SITE_NAME },
-        { property: "og:image", content: shareImage },
-        { property: "og:locale", content: "en_AE" },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: title },
-        { name: "twitter:description", content: description },
-        { name: "twitter:image", content: shareImage },
-      ],
-      links: [{ rel: "canonical", href: communityUrl }],
-      scripts: [
+    const schemaImage = community.heroImage ? absoluteUrl(community.heroImage) : DEFAULT_OG_IMAGE;
+    const ogImage =
+      community.heroImage && !community.heroImage.toLowerCase().endsWith(".avif")
+        ? absoluteUrl(community.heroImage)
+        : DEFAULT_OG_IMAGE;
+    return buildHead({
+      title,
+      description,
+      path: `/communities/${community.slug}`,
+      image: ogImage,
+      type: "article",
+      schemas: [
         {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: "Communities",
-                item: absoluteUrl("/communities"),
-              },
-              {
-                "@type": "ListItem",
-                position: 3,
-                name: community.name,
-                item: communityUrl,
-              },
-            ],
-          }),
-        },
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Place",
-            name: `${community.name}, Dubai`,
-            description,
-            url: communityUrl,
-            image: shareImage,
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "Dubai",
-              addressRegion: "Dubai",
-              addressCountry: "AE",
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Communities",
+              item: absoluteUrl("/communities"),
             },
-          }),
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: community.name,
+              item: communityUrl,
+            },
+          ],
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Place",
+          name: `${community.name}, Dubai`,
+          description,
+          url: communityUrl,
+          image: schemaImage,
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Dubai",
+            addressRegion: "Dubai",
+            addressCountry: "AE",
+          },
         },
       ],
-    };
+    });
   },
   notFoundComponent: CommunityNotFound,
   component: CommunityDetailPage,
@@ -163,6 +151,12 @@ function CommunityDetailPage() {
   const displayName = ar?.name ?? community.name;
   const overview = ar?.overview ?? community.overview;
   const amenities = ar?.amenities ?? community.amenities;
+
+  const currentIdx = communities.findIndex((c) => c.slug === community.slug);
+  const relatedCommunities =
+    currentIdx === -1
+      ? communities.slice(0, 3)
+      : [1, 2, 3].map((offset) => communities[(currentIdx + offset) % communities.length]);
 
   return (
     <main className="bg-[#FBFAF7] pt-[72px] text-[#452C1D]">
@@ -335,6 +329,36 @@ function CommunityDetailPage() {
           </div>
         </section>
       ) : null}
+
+      {/* ── Related Communities Cross-Links ── */}
+      <section className="border-t border-[#452C1D]/12 bg-[#FBFAF7] py-14 sm:py-16">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <h2 className="font-serif text-[14px] uppercase tracking-[0.14em] text-[#452C1D]">
+            {isAr ? p.moreCommunitiesHeading : "EXPLORE MORE DUBAI COMMUNITIES"}
+          </h2>
+          <div className="mt-6 grid gap-5 sm:grid-cols-3">
+            {relatedCommunities.map((rel) => {
+              const relAr = isAr ? communitiesAr[rel.slug] : undefined;
+              return (
+                <Link
+                  key={rel.slug}
+                  to="/communities/$slug"
+                  params={{ slug: rel.slug }}
+                  style={{ textDecoration: "none", color: "var(--color-brown, #452C1D)" }}
+                  className="group block border border-[#452C1D]/15 bg-[#FBFAF7] p-5 transition-colors hover:border-[#452C1D]/45"
+                >
+                  <p className="font-serif text-[15px] uppercase tracking-[0.08em] text-[#452C1D] group-hover:opacity-75">
+                    {relAr?.name ?? rel.name}
+                  </p>
+                  <p className="mt-2 line-clamp-2 font-sans text-xs leading-relaxed text-[#452C1D]/75">
+                    {relAr?.description ?? rel.description}
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       {/* ── Bottom Interest CTA ── */}
       <section className="border-t border-[#452C1D]/12 bg-[#FBFAF7] py-16 sm:py-20">

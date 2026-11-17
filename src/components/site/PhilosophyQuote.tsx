@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { useNav } from "@/context/NavContext";
 import { featuredHero } from "@/content/site";
 
@@ -26,37 +25,11 @@ const philosophyI18n: Record<"en" | "ar", PhilosophyContent> = {
 
 export function PhilosophyQuote() {
   const { lang } = useNav();
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 },
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
   const content = philosophyI18n[lang] || philosophyI18n.en;
+  const isVisible = true;
 
   return (
     <section
-      ref={sectionRef}
       aria-label="Parkwood Properties Architectural Philosophy"
       className="relative flex min-h-[460px] w-full items-center overflow-hidden bg-[#1a120c] text-[#FBFAF7] md:min-h-[520px]"
     >

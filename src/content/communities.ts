@@ -108,12 +108,13 @@ export const communityDetails: CommunityDetail[] = [
     overview: {
       heading: "DUBAI MARINA",
       paragraphs: [
-        "Dubai Marina is an affluent waterfront neighborhood known for its high-rise luxury towers, yacht berths, and scenic 7 km pedestrian promenade Dubai Marina Walk.",
-        "With Dubai Marina Mall, waterfront dining, and direct tram and metro connectivity, it offers unmatched urban marina lifestyle in the heart of new Dubai.",
+        "Dubai Marina is one of the city's most established waterfront districts, defined by sculpted residential towers, private yacht berths, and the seven-kilometre landscaped promenade known as Dubai Marina Walk. Stretching parallel to the Arabian Gulf between Jumeirah Beach Residence and Palm Jumeirah, the neighbourhood pairs vertical waterfront living with immediate pedestrian access to waterside dining, retail, and leisure.",
+        "Developed around a three-kilometre man-made canal connected to the sea at both ends, Dubai Marina offers apartments, podium villas, and sky penthouses across landmark Emaar developments including Marina Promenade, Park Island, Al Majara, and Marina Gate. With direct Dubai Metro and Dubai Tram links, Sheikh Zayed Road access, and proximity to Dubai Media City and DIFC corridors, demand remains consistently resilient among end-users and long-term investors.",
       ],
       restHeading: "Lifestyle & Amenities",
       restParagraphs: [
-        "Residents enjoy immediate access to yacht charters, waterfront cafes, wellness clubs, and the golden shores of JBR Beach just moments away.",
+        "Daily life in Dubai Marina centres on the water. Residents step directly onto shaded jogging paths, yacht club piers, specialty coffee houses, and Dubai Marina Mall, while the open shoreline of JBR Beach and Bluewaters Island sits just minutes away on foot.",
+        "From turnkey one-bedroom residences suited to executive leasing through to full-floor Marina and sea-view penthouses, the secondary market in Dubai Marina offers transparent comparable pricing, strong rental liquidity, and enduring international buyer appeal.",
       ],
     },
     amenities: {
@@ -131,12 +132,13 @@ export const communityDetails: CommunityDetail[] = [
     overview: {
       heading: "PALM JUMEIRAH",
       paragraphs: [
-        "Palm Jumeirah is a world-renowned palm tree-shaped archipelago featuring ultra-luxury beachfront villas, penthouses, and world-class resort hotels.",
-        "Offering direct private beach access, panoramic Arabian Gulf views, and iconic destinations including Atlantis, The Palm and Nakheel Mall.",
+        "Palm Jumeirah is Dubai's flagship man-made archipelago, shaped into a central trunk, sixteen residential fronds, and a protective eleven-kilometre crescent overlooking the Arabian Gulf. Known globally for low-density beachfront villas and resort-managed waterfront apartments, it remains one of the most sought-after coastal addresses in the Middle East.",
+        "Along the private gated fronds, Garden Homes and Signature Villas enjoy direct sand-and-sea frontage, landscaped plots, and uninterrupted views across the water toward Dubai Marina and Burj Al Arab. Meanwhile, the trunk and crescent host boutique residences, branded hotel apartments, private beach clubs, and Nakheel Mall connected by the Palm Monorail.",
       ],
       restHeading: "Island Living",
       restParagraphs: [
-        "From Michelin-starred dining to peaceful shoreline strolls, Palm Jumeirah represents the absolute peak of coastal luxury real estate.",
+        "Life on Palm Jumeirah balances private coastal seclusion with five-star hospitality on your doorstep — from waterfront running tracks at Al Ittihad Park and Palma Marina promenades to fine dining destinations across Atlantis The Royal, One&Only The Palm, and West Beach.",
+        "Supported by limited beachfront land supply and sustained global end-user demand, prime resale villas and turnkey waterfront residences on Palm Jumeirah continue to anchor Dubai's ultra-prime real estate market.",
       ],
     },
     amenities: {

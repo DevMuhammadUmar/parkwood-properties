@@ -5,8 +5,7 @@ import { ExploreCommunities } from "@/components/site/ExploreCommunities";
 import { AboutSlider } from "@/components/site/AboutSlider";
 import { OurServices } from "@/components/site/OurServices";
 import { StayInTouch } from "@/components/site/StayInTouch";
-import { company } from "@/content/site";
-import { buildFAQSchema, buildHead, SITE_URL, absoluteUrl } from "@/lib/seo";
+import { buildFAQSchema, buildHead, absoluteUrl } from "@/lib/seo";
 
 const homeFaqs = [
   {
@@ -32,8 +31,8 @@ const homeFaqs = [
 ];
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    ...buildHead({
+  head: () =>
+    buildHead({
       title: "Dubai Luxury Homes & Off-Plan Investments | Parkwood Properties Dubai",
       description:
         "Discover luxury villas, penthouses, and off-plan property investments across Dubai's top masterplanned communities with Parkwood Properties Dubai.",
@@ -41,51 +40,6 @@ export const Route = createFileRoute("/")({
       image: absoluteUrl("/social.jpg"),
       schemas: [buildFAQSchema(homeFaqs)],
     }),
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": ["RealEstateAgent", "LocalBusiness"],
-          "@id": "https://parkwoodproperties.ae/#organization",
-          name: "Parkwood Properties Dubai",
-          alternateName: "Parkwood Properties",
-          description:
-            "Parkwood Properties Dubai is a premier property consultancy advising on luxury homes and off-plan investments across Emaar masterplanned communities in Dubai.",
-          slogan: company.tagline,
-          url: SITE_URL,
-          telephone: company.phone,
-          email: company.email,
-          image: absoluteUrl("/hero.jpeg"),
-          logo: absoluteUrl("/logo.svg"),
-          priceRange: "AED 2,000,000 - AED 100,000,000+",
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: "Dubai",
-            addressCountry: "AE",
-          },
-          geo: {
-            "@type": "GeoCoordinates",
-            latitude: 25.2048,
-            longitude: 55.2708,
-          },
-          areaServed: {
-            "@type": "City",
-            name: "Dubai",
-          },
-          sameAs: [
-            "https://www.linkedin.com/company/parkwood-properties-dubai/",
-            "https://www.facebook.com/profile.php?id=61592645326753",
-            "https://www.instagram.com/propertiesparkwood/",
-          ],
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify(buildFAQSchema(homeFaqs)),
-      },
-    ],
-  }),
   component: Index,
 });
 

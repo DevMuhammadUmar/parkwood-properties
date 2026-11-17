@@ -7,6 +7,8 @@ const routes = [
   "/services",
   "/communities",
   "/communities/downtown-dubai",
+  "/communities/dubai-marina",
+  "/communities/palm-jumeirah",
   "/communities/the-valley",
   "/communities/dubai-hills-estate",
   "/communities/the-oasis-by-emaar",
@@ -177,8 +179,42 @@ async function check() {
     passed = false;
   }
 
+  // Check sitemap.xml includes all 20 canonical routes
+  try {
+    const smRes = await fetch(baseUrl + "/sitemap.xml");
+    const smXml = await smRes.text();
+    const missing = routes.filter(
+      (r) => !smXml.includes(`<loc>https://parkwoodproperties.ae${r}</loc>`),
+    );
+    if (smRes.status === 200 && missing.length === 0) {
+      console.log(`  PASS: sitemap.xml includes all ${routes.length} canonical routes`);
+    } else {
+      console.error(`  FAIL: sitemap.xml missing routes: ${JSON.stringify(missing)}`);
+      passed = false;
+    }
+  } catch (e) {
+    console.error(`  FAIL: sitemap.xml check error:`, e.message);
+    passed = false;
+  }
+
+  // Check __forms.html has noindex
+  try {
+    const formsRes = await fetch(baseUrl + "/__forms.html");
+    const formsHtml = await formsRes.text();
+    if (/name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(formsHtml)) {
+      console.log(`  PASS: /__forms.html has meta robots noindex`);
+    } else {
+      console.error(`  FAIL: /__forms.html missing meta robots noindex`);
+      passed = false;
+    }
+  } catch (e) {
+    console.error(`  FAIL: /__forms.html check error:`, e.message);
+    passed = false;
+  }
+
   console.log(`\n============================================`);
   console.log(passed ? "ALL CHECKS PASSED (100% SEO & FAVICON COMPLIANT)!" : "SOME CHECKS FAILED!");
+  if (!passed) process.exitCode = 1;
 }
 
 check();

@@ -8,8 +8,8 @@ import { useNav } from "@/context/NavContext";
 import { buildBreadcrumbSchema, buildHead, SITE_URL, absoluteUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/communities")({
-  head: () => ({
-    ...buildHead({
+  head: () =>
+    buildHead({
       title: "Dubai Masterplanned Communities & Luxury Real Estate | Parkwood Properties",
       description:
         "Explore premier Dubai residential masterplans: Downtown Dubai, Dubai Hills Estate, The Oasis, Dubai Creek Harbour, Arabian Ranches III, and Emaar Beachfront.",
@@ -19,12 +19,7 @@ export const Route = createFileRoute("/communities")({
           { name: "Home", path: "/" },
           { name: "Communities", path: "/communities" },
         ]),
-      ],
-    }),
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
+        {
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: "Dubai Masterplanned Communities & Luxury Real Estate",
@@ -40,10 +35,9 @@ export const Route = createFileRoute("/communities")({
               url: absoluteUrl(`/communities/${c.slug}`),
             })),
           },
-        }),
-      },
-    ],
-  }),
+        },
+      ],
+    }),
   component: CommunitiesPage,
 });
 

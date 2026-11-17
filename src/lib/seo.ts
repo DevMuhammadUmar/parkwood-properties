@@ -17,7 +17,7 @@ export function absoluteUrl(path: string): string {
   const normalised = path.startsWith("/") ? path : `/${path}`;
   const clean =
     normalised.length > 1 && normalised.endsWith("/") ? normalised.slice(0, -1) : normalised;
-  return `${SITE_URL}${clean}`;
+  return `${SITE_URL}${encodeURI(clean)}`;
 }
 
 export const DEFAULT_OG_IMAGE = absoluteUrl("/social.jpg");
@@ -65,6 +65,10 @@ export function buildHead({
     meta: [
       { title: pageTitle },
       { name: "description", content: description },
+      {
+        name: "robots",
+        content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      },
       { property: "og:title", content: pageTitle },
       { property: "og:description", content: description },
       { property: "og:url", content: canonicalUrl },
@@ -144,6 +148,8 @@ export function buildRealEstateAgentSchema() {
     areaServed: [
       { "@type": "City", name: "Dubai" },
       { "@type": "AdministrativeArea", name: "Downtown Dubai" },
+      { "@type": "AdministrativeArea", name: "Dubai Marina" },
+      { "@type": "AdministrativeArea", name: "Palm Jumeirah" },
       { "@type": "AdministrativeArea", name: "Dubai Hills Estate" },
       { "@type": "AdministrativeArea", name: "Dubai Creek Harbour" },
       { "@type": "AdministrativeArea", name: "The Oasis by Emaar" },
@@ -151,6 +157,7 @@ export function buildRealEstateAgentSchema() {
       { "@type": "AdministrativeArea", name: "Emaar South" },
       { "@type": "AdministrativeArea", name: "The Valley" },
       { "@type": "AdministrativeArea", name: "Rashid Yachts & Marina" },
+      { "@type": "AdministrativeArea", name: "Grand Polo Club & Resort" },
       { "@type": "AdministrativeArea", name: "Emaar Beachfront" },
     ],
     sameAs: [
